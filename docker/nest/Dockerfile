@@ -10,6 +10,6 @@ COPY . .
 
 RUN yarn build
 
-EXPOSE 3000
+EXPOSE 3000 9229
 
-CMD ["yarn", "start:dev"]
+CMD ["yarn", "start:debug"]
