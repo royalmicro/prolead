@@ -8,8 +8,6 @@ ConfigModule.forRoot({
 });
 
 const configService = new ConfigService();
-
-console.log(__dirname);
 export const dataSourceOptions: DataSourceOptions = {
   type: 'mysql',
   host: configService.get<string>('DB_HOST'),

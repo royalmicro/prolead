@@ -21,6 +21,6 @@ export class UserDto {
   password: string;
 }
 
-export class UpdateUserDto extends PartialType(
+export class CreateUserDto extends PartialType(
   OmitType(UserDto, ['id'] as const),
 ) {}

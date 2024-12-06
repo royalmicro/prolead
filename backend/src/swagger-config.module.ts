@@ -9,7 +9,7 @@ export class SwaggerConfigModule {
       .setTitle('Prolead API')
       .setDescription('The prolead API description')
       .setVersion('1.0')
-      /* .addBearerAuth() */
+      .addBearerAuth()
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
