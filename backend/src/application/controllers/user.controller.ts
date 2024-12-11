@@ -6,18 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  Inject,
 } from '@nestjs/common';
-import { UserService } from 'src/domain/services/user/user.service';
 import { AuthService } from '../services/auth/auth.service';
 import { CreateUserDto } from 'src/domain/model/user/user.dto';
 
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { UserRepositoryInterface } from 'src/domain/model/user/user.repository.interface';
 
 @ApiBearerAuth()
 @Controller('users')
 export class UserController {
   constructor(
-    private readonly userService: UserService,
+    @Inject('UserRepositoryInterface')
+    private readonly userRepository: UserRepositoryInterface,
     private readonly auth: AuthService,
   ) {}
 
@@ -28,26 +30,26 @@ export class UserController {
       ...user,
       password: hashedPassword,
     };
-    return this.userService.create(user);
+    return this.userRepository.create(user);
   }
 
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return this.userRepository.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userRepository.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() user: CreateUserDto) {
-    return this.userService.update(+id, user);
+    return this.userRepository.update(+id, user);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userRepository.remove(+id);
   }
 }
