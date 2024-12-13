@@ -4,10 +4,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
-
+import { LicenceOrm } from './licence.orm';
 @Entity('users')
-export class User {
+export class UserOrm {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,6 +21,10 @@ export class User {
 
   @Column()
   password: string;
+
+  @ManyToOne(() => LicenceOrm, (licence) => licence.id)
+  @JoinColumn({ name: 'licenceId' })
+  licence: LicenceOrm;
 
   @Column({ default: true })
   isActive: boolean;
