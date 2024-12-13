@@ -1,52 +1,47 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from 'src/domain/model/user/user.dto';
 import { UserRepositoryInterface } from 'src/domain/model/user/user.repository.interface';
-import { User } from 'src/infrastructure/persistence/orm/user.orm';
+import { UserOrm } from 'src/infrastructure/persistence/orm/user.orm';
 import { Repository } from 'typeorm';
+import { BaseRepository } from '../base.repository';
+import { UserDto } from 'src/domain/model/user/user.dto';
 
 export const USER_REPOSITORY = Symbol('USER_REPOSITORY');
 
 @Injectable()
-export class UserRepository implements UserRepositoryInterface {
+export class UserRepository
+  extends BaseRepository<UserOrm>
+  implements UserRepositoryInterface<UserOrm>
+{
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {}
-
-  async create(userdto: CreateUserDto): Promise<User> {
-    const newUser = this.userRepository.create(userdto);
-    return this.userRepository.save(newUser);
+    @InjectRepository(UserOrm)
+    private readonly userRepository: Repository<UserOrm>,
+  ) {
+    super(userRepository);
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find();
-  }
-
-  async findOne(id: number): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    return user;
-  }
-
-  async findByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findOne({
+  async findByEmail(email: string, relations?: string[]): Promise<UserDto> {
+    const user = (await this.userRepository.findOne({
       where: { email },
-    });
+      relations,
+    })) as UserOrm;
 
-    return user;
+    return this.toDto(user);
   }
 
-  async update(id: number, userDto: CreateUserDto): Promise<User> {
-    const user = await this.findOne(id);
-    Object.assign(user, userDto);
-    return this.userRepository.save(user);
-  }
+  public toDto(userOrm?: UserOrm): UserDto | null {
+    if (!userOrm) {
+      return null;
+    }
 
-  async remove(id: number): Promise<void> {
-    const user = await this.findOne(id);
-    await this.userRepository.remove(user);
+    return {
+      id: userOrm.id,
+      name: userOrm.name,
+      email: userOrm.email,
+      password: userOrm.password,
+      isActive: userOrm.isActive,
+      createdAt: userOrm.createdAt,
+      updatedAt: userOrm.updatedAt,
+    };
   }
 }

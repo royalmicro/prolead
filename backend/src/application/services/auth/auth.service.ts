@@ -1,15 +1,24 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from 'src/domain/model/auth/register.dto';
-import { CreateUserDto } from 'src/domain/model/user/user.dto';
+import { CreateUserDto, UserDto } from 'src/domain/model/user/user.dto';
 import { UserRepositoryInterface } from 'src/domain/model/user/user.repository.interface';
+import { LicenceRepositoryInterface } from 'src/domain/model/licence/licence.repository.interface';
+import { LicenceDto } from 'src/domain/model/licence/licence.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject('UserRepositoryInterface')
-    private readonly userRepository: UserRepositoryInterface,
+    private readonly userRepository: UserRepositoryInterface<UserDto>,
+    @Inject('LicenceRepositoryInterface')
+    private readonly licenceRepository: LicenceRepositoryInterface<LicenceDto>,
     private jwtService: JwtService,
   ) {}
 
@@ -35,7 +44,14 @@ export class AuthService {
     }
 
     const hashedPassword = await this.hashPassword(password);
+
+    const licence = await this.licenceRepository.findOne(1);
+    if (!licence) {
+      throw new NotFoundException('Default licence not found');
+    }
+
     const newUser: CreateUserDto = { name, email, password: hashedPassword };
+    newUser.licence = licence;
     this.userRepository.create(newUser);
 
     return { message: 'User registered successfully', user: newUser };
