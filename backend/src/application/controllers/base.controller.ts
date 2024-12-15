@@ -1,4 +1,4 @@
-import { Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { BaseRepositoryInterface } from 'src/domain/model/repository.interface';
 
 export class BaseController<T, CreateDto, UpdateDto> {
@@ -17,8 +17,8 @@ export class BaseController<T, CreateDto, UpdateDto> {
   }
 
   @Get()
-  findAll(@Query('loadRelationIds') loadRelationIds?: boolean) {
-    return this.repository.findAll(this.defaultRelations, loadRelationIds);
+  findAll() {
+    return this.repository.findAll(this.defaultRelations, true);
   }
 
   @Get(':id')
