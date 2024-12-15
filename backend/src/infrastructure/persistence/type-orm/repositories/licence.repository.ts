@@ -3,18 +3,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LicenceRepositoryInterface } from 'src/domain/model/licence/licence.repository.interface';
 import { Repository } from 'typeorm';
 import { BaseRepository } from '../base.repository';
-import { LicenceOrm } from '../../orm/licence.orm';
-
-export const USER_REPOSITORY = Symbol('USER_REPOSITORY');
+import { LicenceDto } from 'src/domain/model/licence/licence.dto';
+import { LicenceSchema } from '../../orm/licence.schema';
 
 @Injectable()
 export class LicenceRepository
-  extends BaseRepository<LicenceOrm>
-  implements LicenceRepositoryInterface<LicenceOrm>
+  extends BaseRepository<LicenceDto>
+  implements LicenceRepositoryInterface<LicenceDto>
 {
   constructor(
-    @InjectRepository(LicenceOrm)
-    private readonly licenceRepository: Repository<LicenceOrm>,
+    @InjectRepository(LicenceSchema)
+    private readonly licenceRepository: Repository<LicenceDto>,
   ) {
     super(licenceRepository);
   }

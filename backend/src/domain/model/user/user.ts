@@ -1,8 +1,11 @@
+import { Licence } from '../licence/licence';
+
 export class User {
   private id: number;
   private email: string;
   private name: string;
   private password: string;
+  private licence: Licence;
 
   constructor() {}
   public setId(id: number): this {
