@@ -1,4 +1,4 @@
-import { LicenceInterface } from '../licence/licence.interface';
+import { LicenceInterface } from 'src/infrastructure/persistence/orm/licence.schema';
 
 export interface UserInterface {
   id: number;

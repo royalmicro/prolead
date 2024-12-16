@@ -1,5 +1,17 @@
-import { UserInterface } from 'src/domain/model/user/user.interface';
 import { EntitySchema } from 'typeorm';
+import { LicenceInterface } from './licence.schema';
+
+export interface UserInterface {
+  id: number;
+
+  name: string;
+  email: string;
+  password: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  licence: LicenceInterface;
+}
 
 export const UserSchema = new EntitySchema<UserInterface>({
   name: 'User',

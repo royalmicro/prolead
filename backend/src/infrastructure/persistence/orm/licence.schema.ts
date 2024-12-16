@@ -1,5 +1,11 @@
-import { LicenceInterface } from 'src/domain/model/licence/licence.interface';
+import { UserInterface } from 'src/domain/model/user/user.interface';
 import { EntitySchema } from 'typeorm';
+
+export interface LicenceInterface {
+  id: number;
+  type: 'BASIC' | 'PREMIUM';
+  users: UserInterface[];
+}
 
 export const LicenceSchema = new EntitySchema<LicenceInterface>({
   name: 'Licence',
@@ -8,7 +14,7 @@ export const LicenceSchema = new EntitySchema<LicenceInterface>({
     id: {
       type: Number,
       primary: true,
-      generated: true,
+      generated: 'increment',
     },
     type: {
       type: 'enum',
