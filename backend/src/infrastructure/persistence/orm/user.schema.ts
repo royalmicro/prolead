@@ -1,5 +1,5 @@
 import { EntitySchema } from 'typeorm';
-import { LicenceInterface } from './licence.schema';
+import { Portal } from 'src/domain/model/portal/portal';
 
 export interface UserInterface {
   id: number;
@@ -10,7 +10,8 @@ export interface UserInterface {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
-  licence: LicenceInterface;
+  portals: Portal[];
+  ownedPortal: Portal;
 }
 
 export const UserSchema = new EntitySchema<UserInterface>({
@@ -47,11 +48,26 @@ export const UserSchema = new EntitySchema<UserInterface>({
     },
   },
   relations: {
-    licence: {
-      type: 'many-to-one',
-      target: 'Licence',
-      joinColumn: {
-        name: 'licenceId',
+    ownedPortal: {
+      type: 'one-to-one',
+      target: 'Portal',
+      inverseSide: 'owner',
+      joinColumn: true,
+    },
+    portals: {
+      type: 'many-to-many',
+      target: 'Portal',
+      inverseSide: 'users',
+      joinTable: {
+        name: 'user_portals',
+        joinColumn: {
+          name: 'user_id',
+          referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+          name: 'portal_id',
+          referencedColumnName: 'id',
+        },
       },
     },
   },

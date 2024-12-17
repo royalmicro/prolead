@@ -1,6 +1,6 @@
 import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
-import { LicenceDto } from '../licence/licence.dto';
+import { PortalDto } from '../portal/portal.dto';
 
 export class UserDto {
   @ApiProperty()
@@ -21,7 +21,7 @@ export class UserDto {
   @MinLength(6)
   password: string;
 
-  licence?: LicenceDto;
+  ownedPortal: PortalDto;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;

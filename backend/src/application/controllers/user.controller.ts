@@ -22,7 +22,7 @@ export class UserController extends BaseController<
     private readonly userRepository: UserRepositoryInterface<UserDto>,
     private readonly auth: AuthService,
   ) {
-    super(userRepository, ['licence']);
+    super(userRepository, ['ownedPortal', 'portals']);
   }
 
   @Post()

@@ -6,6 +6,9 @@ import { UserSchema } from 'src/infrastructure/persistence/orm/user.schema';
 import { LicenceRepository } from 'src/infrastructure/persistence/type-orm/repositories/licence.repository';
 import { PortalRepository } from 'src/infrastructure/persistence/type-orm/repositories/portal.repository';
 import { UserRepository } from 'src/infrastructure/persistence/type-orm/repositories/user.repository';
+import { EntityEventHandlerRegistry } from './events/entity-event-handler-registry';
+import { UserEventHandler } from './model/user/user-event-handler';
+import { CrudEventListener } from './events/listeners/crud-event-listener';
 
 @Module({
   imports: [
@@ -26,6 +29,9 @@ import { UserRepository } from 'src/infrastructure/persistence/type-orm/reposito
       provide: 'PortalRepositoryInterface',
       useClass: PortalRepository,
     },
+    CrudEventListener,
+    EntityEventHandlerRegistry,
+    UserEventHandler,
   ],
   exports: [
     'UserRepositoryInterface',
