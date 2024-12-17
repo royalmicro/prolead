@@ -21,11 +21,4 @@ export const LicenceSchema = new EntitySchema<LicenceInterface>({
       enum: ['BASIC', 'PREMIUM'],
     },
   },
-  relations: {
-    users: {
-      type: 'one-to-many',
-      target: 'User',
-      inverseSide: 'licence',
-    },
-  },
 });

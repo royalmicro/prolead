@@ -1,13 +1,18 @@
-import { Licence } from '../licence/licence';
+import { BaseEntity } from '../base.entity';
+import { Portal } from '../portal/portal';
 
-export class User {
+export class User extends BaseEntity {
   private id: number;
   private email: string;
   private name: string;
   private password: string;
-  private licence: Licence;
+  private ownedPortal: Portal;
+  private portals: Portal[];
 
-  constructor() {}
+  constructor() {
+    super();
+  }
+
   public setId(id: number): this {
     this.id = id;
     return this;

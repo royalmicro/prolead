@@ -1,28 +1,20 @@
 import { OmitType, PartialType } from '@nestjs/swagger';
-import { Portal } from './portal';
+import { LicenceDto } from '../licence/licence.dto';
+import { UserDto } from '../user/user.dto';
 
 export class PortalDto {
   id: number;
   name: string;
   description?: string;
-  ownerId: string;
-  userIds: string[];
+  ownerId: number;
+  userIds: number[];
   serviceIds: string[];
-  licenseIds: string[];
+  owner: UserDto;
+  licence: LicenceDto;
   createdAt: Date;
   updatedAt: Date;
 
-  constructor(portal: Portal) {
-    this.id = portal.id;
-    this.name = portal.name;
-    this.description = portal.description;
-    this.ownerId = portal.ownerId;
-    this.userIds = portal.userIds;
-    this.serviceIds = portal.serviceIds;
-    this.licenseIds = portal.licenseIds;
-    this.createdAt = portal.createdAt;
-    this.updatedAt = portal.updatedAt;
-  }
+  constructor() {}
 }
 
 export class CreatePortalDto extends PartialType(

@@ -5,16 +5,22 @@ import { Repository } from 'typeorm';
 import { BaseRepository } from '../base.repository';
 import { LicenceDto } from 'src/domain/model/licence/licence.dto';
 import { LicenceSchema } from '../../orm/licence.schema';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class LicenceRepository
   extends BaseRepository<LicenceDto>
   implements LicenceRepositoryInterface<LicenceDto>
 {
+  getEntityName(): string {
+    return 'Licence';
+  }
+
   constructor(
     @InjectRepository(LicenceSchema)
-    private readonly licenceRepository: Repository<LicenceDto>,
+    protected readonly licenceRepository: Repository<LicenceDto>,
+    protected readonly eventEmitter: EventEmitter2,
   ) {
-    super(licenceRepository);
+    super(licenceRepository, eventEmitter);
   }
 }

@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { BaseRepository } from '../base.repository';
 import { UserDto } from 'src/domain/model/user/user.dto';
 import { UserSchema } from '../../orm/user.schema';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 export const USER_REPOSITORY = Symbol('USER_REPOSITORY');
 
@@ -15,33 +16,20 @@ export class UserRepository
 {
   constructor(
     @InjectRepository(UserSchema)
-    private readonly userRepository: Repository<UserDto>,
+    protected readonly userRepository: Repository<UserDto>,
+    protected readonly eventEmitter: EventEmitter2,
   ) {
-    super(userRepository);
+    super(userRepository, eventEmitter);
+  }
+
+  getEntityName(): string {
+    return 'User';
   }
 
   async findByEmail(email: string, relations?: string[]): Promise<UserDto> {
-    const user = await this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: { email },
       relations,
     });
-
-    return this.toDto(user);
-  }
-
-  public toDto(userOrm?: UserDto): UserDto | null {
-    if (!userOrm) {
-      return null;
-    }
-
-    return {
-      id: userOrm.id,
-      name: userOrm.name,
-      email: userOrm.email,
-      password: userOrm.password,
-      isActive: userOrm.isActive,
-      createdAt: userOrm.createdAt,
-      updatedAt: userOrm.updatedAt,
-    };
   }
 }

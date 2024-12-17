@@ -40,9 +40,12 @@ export const PortalSchema = new EntitySchema<Portal>({
   },
   relations: {
     owner: {
-      type: 'many-to-one',
+      type: 'one-to-one',
       target: 'User',
-      inverseSide: 'portals',
+      inverseSide: 'ownedPortal',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+      cascade: true,
     },
     users: {
       type: 'many-to-many',
