@@ -1,4 +1,4 @@
-import { Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
 import { BaseRepositoryInterface } from 'src/domain/model/repository.interface';
 
 export class BaseController<T, CreateDto, UpdateDto> {
@@ -11,14 +11,23 @@ export class BaseController<T, CreateDto, UpdateDto> {
     private readonly defaultRelations: string[] = [],
   ) {}
 
+  static getCreateDtoClass(): any {
+    throw new Error('Child class must override getCreateDtoClass');
+  }
+
+  static getUpdateDtoClass(): any {
+    throw new Error('Child class must override getUpdateDtoClass');
+  }
+
   @Post()
   async create(@Body() createDto: CreateDto) {
     return this.repository.create(createDto as any);
   }
 
   @Get()
-  findAll() {
-    return this.repository.findAll(this.defaultRelations, true);
+  findAll(@Request() req: any) {
+    const { portalId } = req.user;
+    return this.repository.findByPortal(portalId, this.defaultRelations);
   }
 
   @Get(':id')

@@ -1,19 +1,20 @@
 import { UserInterface } from 'src/domain/model/user/user.interface';
 import { EntitySchema } from 'typeorm';
 import { LicenceInterface } from './licence.schema';
+import { ServiceInterface } from './service.schema';
 
-export interface Portal {
-  id: string;
+export interface PortalInterface {
+  id: number;
   name: string;
   description?: string;
-  owner: UserInterface;
   users: UserInterface[];
   licences: LicenceInterface[];
+  services: ServiceInterface[];
   createdAt: Date;
   updatedAt: Date;
 }
 
-export const PortalSchema = new EntitySchema<Portal>({
+export const PortalSchema = new EntitySchema<PortalInterface>({
   name: 'Portal',
   tableName: 'portals',
   columns: {
@@ -39,22 +40,20 @@ export const PortalSchema = new EntitySchema<Portal>({
     },
   },
   relations: {
-    owner: {
-      type: 'one-to-one',
-      target: 'User',
-      inverseSide: 'ownedPortal',
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE',
-      cascade: true,
-    },
     users: {
-      type: 'many-to-many',
+      type: 'one-to-many',
       target: 'User',
-      inverseSide: 'portals',
+      inverseSide: 'portal',
+      cascade: true,
     },
     licences: {
       type: 'one-to-many',
       target: 'Licence',
+      inverseSide: 'portal',
+    },
+    services: {
+      type: 'one-to-many',
+      target: 'Service',
       inverseSide: 'portal',
     },
   },

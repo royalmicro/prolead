@@ -21,9 +21,11 @@ export class UserEventHandler implements EntityEventHandlerInterface {
 
     portal.name = `${user.name} Portal`;
     portal.description = `Portal of user ${user.name}`;
-    portal.owner = user;
 
-    this.portalRepository.create(portal);
+    const createdPortal = await this.portalRepository.create(portal);
+
+    user.portal = createdPortal;
+    this.userRepository.update(user.id, user);
   }
 
   handleUpdatedEvent(payload: any): void {

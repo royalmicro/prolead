@@ -21,16 +21,20 @@ export class UserDto {
   @MinLength(6)
   password: string;
 
-  ownedPortal: PortalDto;
+  portal?: PortalDto | number;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export class CreateUserDto extends PartialType(
-  OmitType(UserDto, ['id'] as const),
-) {}
+  OmitType(UserDto, ['id', 'portal'] as const),
+) {
+  portal?: number | PortalDto;
+}
 
 export class UpdateUserDto extends PartialType(
-  OmitType(UserDto, ['id'] as const),
-) {}
+  OmitType(UserDto, ['id', 'portal'] as const),
+) {
+  portal?: number | PortalDto;
+}

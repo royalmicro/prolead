@@ -1,4 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from 'src/domain/model/auth/register.dto';
@@ -18,13 +23,13 @@ export class AuthService {
   ) {}
 
   async signIn(email: string, pass: string): Promise<any> {
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.userRepository.findByEmail(email, ['portal']);
 
     const equalPassword = await bcrypt.compare(pass, user.password);
     if (!equalPassword) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, portal: user.portal };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
@@ -35,7 +40,7 @@ export class AuthService {
 
     const userExists = await this.userRepository.findByEmail(email);
     if (userExists) {
-      throw new Error('User already exists');
+      throw new HttpException('User already exists', 400);
     }
 
     const hashedPassword = await this.hashPassword(password);

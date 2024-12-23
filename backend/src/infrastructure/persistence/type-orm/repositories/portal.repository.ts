@@ -24,6 +24,9 @@ export class PortalRepository
   ) {
     super(portalRepository, eventEmitter);
   }
+  findByPortal(): Promise<PortalDto[]> {
+    return this.findAll([], true);
+  }
 
   create(data: DeepPartial<PortalDto>): Promise<PortalDto> {
     data.licence = new LicenceDto();
