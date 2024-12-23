@@ -23,4 +23,7 @@ export class LicenceRepository
   ) {
     super(licenceRepository, eventEmitter);
   }
+  findByPortal(): Promise<LicenceDto[]> {
+    return;
+  }
 }

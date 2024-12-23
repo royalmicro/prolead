@@ -7,8 +7,6 @@ import { UserDto } from 'src/domain/model/user/user.dto';
 import { UserSchema } from '../../orm/user.schema';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-export const USER_REPOSITORY = Symbol('USER_REPOSITORY');
-
 @Injectable()
 export class UserRepository
   extends BaseRepository<UserDto>
@@ -31,5 +29,12 @@ export class UserRepository
       where: { email },
       relations,
     });
+  }
+
+  async findByPortal(
+    portalId: number,
+    relations?: string[],
+  ): Promise<UserDto[]> {
+    return this.findAll(relations, true, { portal: { id: portalId } });
   }
 }

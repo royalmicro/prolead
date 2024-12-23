@@ -21,14 +21,16 @@ export abstract class BaseRepository<T extends { id: number }> {
   async findAll(
     relations: string[] = [],
     loadRelationIds: boolean = false,
+    where?: FindOptionsWhere<T>,
   ): Promise<T[]> {
     if (loadRelationIds) {
       return this.repository.find({
         loadRelationIds: true,
+        where,
       });
     }
 
-    return this.repository.find({ relations });
+    return this.repository.find({ relations, where });
   }
 
   async findOne(id: number, relations: string[] = []): Promise<T> {

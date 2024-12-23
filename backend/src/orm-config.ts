@@ -15,8 +15,10 @@ export const dataSourceOptions: DataSourceOptions = {
   username: configService.get<string>('DB_USERNAME'),
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_DATABASE'),
-  entities: [__dirname + '/infrastructure/persistence/orm/*.schema.{ts,js}'],
-  migrations: [__dirname + '/infrastructure/persistence/migrations/*.ts'],
+  /* entities: [__dirname + '/infrastructure/persistence/orm/*.schema.{ts,js}'], */
+  /* migrations: [__dirname + '/infrastructure/persistence/migrations/*.ts'], */
+  entities: ['dist/**/*.schema.js'],
+  migrations: ['dist/**/*-migration.js'],
   logging: ['query', 'error'],
   synchronize: false,
 };

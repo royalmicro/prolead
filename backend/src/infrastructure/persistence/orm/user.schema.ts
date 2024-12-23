@@ -3,15 +3,13 @@ import { Portal } from 'src/domain/model/portal/portal';
 
 export interface UserInterface {
   id: number;
-
   name: string;
   email: string;
   password: string;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
-  portals: Portal[];
-  ownedPortal: Portal;
+  portal: Portal;
 }
 
 export const UserSchema = new EntitySchema<UserInterface>({
@@ -48,27 +46,12 @@ export const UserSchema = new EntitySchema<UserInterface>({
     },
   },
   relations: {
-    ownedPortal: {
-      type: 'one-to-one',
-      target: 'Portal',
-      inverseSide: 'owner',
-      joinColumn: true,
-    },
-    portals: {
-      type: 'many-to-many',
+    portal: {
+      type: 'many-to-one',
       target: 'Portal',
       inverseSide: 'users',
-      joinTable: {
-        name: 'user_portals',
-        joinColumn: {
-          name: 'user_id',
-          referencedColumnName: 'id',
-        },
-        inverseJoinColumn: {
-          name: 'portal_id',
-          referencedColumnName: 'id',
-        },
-      },
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     },
   },
 });

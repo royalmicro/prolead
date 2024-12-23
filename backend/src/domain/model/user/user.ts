@@ -6,8 +6,7 @@ export class User extends BaseEntity {
   private email: string;
   private name: string;
   private password: string;
-  private ownedPortal: Portal;
-  private portals: Portal[];
+  private portal: Portal;
 
   constructor() {
     super();
