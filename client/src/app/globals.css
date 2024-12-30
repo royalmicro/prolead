@@ -3,19 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: linear-gradient(135deg, #6e8efb, #a777e3);
   --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: linear-gradient(0deg, #4A3E94, #28293D);
     --foreground: #ededed;
+    --title-color: #ffffff;
   }
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--title-color);
 }
